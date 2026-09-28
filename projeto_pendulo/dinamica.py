@@ -29,6 +29,30 @@ def calcular_angulo_vertical(vetor):
 
     return angulo
 
+def calcular_angulo_entre_vetores(vetor_1, vetor_2):
+    """
+    Calcula o ângulo entre os dois vetores.
+    O resultado é dado em radianos.
+
+    vetor_1: Direção da primeira haste
+    vetor_2: Direção da segunda haste
+
+    O ângulo é medido de vetor_1 para vetor_2
+    """
+
+    x1, y1 = vetor_1
+    x2, y2 = vetor_2
+
+    prod_vetorial = x1*y2 - y1*x2
+    prod_escalar = x1*x2 + y1*y2
+
+    beta = np.arctan2(
+        prod_vetorial,
+        prod_escalar
+    ) 
+
+    return beta
+
 def calcular_angulo(caminho_csv):
     """
     Leitura dos dados das posições e calculo dos ângulos
@@ -62,21 +86,21 @@ def calcular_angulo(caminho_csv):
         # ANGULO ENTRE A VERTICAL 
         #
 
-        theta_1 = calcular_angulo_vertical(r1)
-        theta_2 = calcular_angulo_vertical(r2)
+        alpha = calcular_angulo_vertical(r1)
+        beta = calcular_angulo_entre_vetores(r1, r2)
 
-        theta_1_graus = np.degrees(theta_1)
-        theta_2_graus = np.degrees(theta_2)
+        alpha_graus = np.degrees(alpha)
+        beta_graus = np.degrees(beta)
 
         resultados.append({
             "frame": linha["frame"],
             "tempo": linha["tempo"],
 
-            "theta_1": theta_1,
-            "theta_2": theta_2,
+            "alpha": alpha,
+            "beta": beta,
 
-            "theta_1_graus": theta_1_graus,
-            "theta_2_graus": theta_2_graus
+            "alpha_graus": alpha_graus,
+            "beta_graus": beta_graus
         })
 
     return pd.DataFrame(resultados)

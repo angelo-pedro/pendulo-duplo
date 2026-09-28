@@ -49,13 +49,11 @@ def centro_da_mascara(mascara,
 
 def detectar_pontos(frame):
     """
-    Detecção de P0, P1, P2 e V
+    Detecção de P0, P1, P2
 
     P0: Ponto Azul
     P1: Ponto Vermelho
     P2: Ponto Verde
-    V: Ponto Laranja
-
 
     Retorno:
     Dicionário com as quatro posições
@@ -105,18 +103,8 @@ def detectar_pontos(frame):
         np.array([140, 255, 255])
     )
 
-    #
-    # LARANJA
-    #
-    mascara_laranja = cv2.inRange(
-        hsv,
-        np.array([9, 100, 100]),
-        np.array([16, 255, 255])
-    )
-
     #Encontrar os pontos 
     
-    V = centro_da_mascara(mascara_laranja)
     P2 = centro_da_mascara(mascara_verde)
     P1 = centro_da_mascara(mascara_vermelha)
     P0 = centro_da_mascara(mascara_azul)
@@ -124,8 +112,7 @@ def detectar_pontos(frame):
     pontos = {
         "P0": P0,
         "P1": P1,
-        "P2": P2,
-        "V": V
+        "P2": P2
     }
 
     return pontos
@@ -192,9 +179,7 @@ def salvar_posicoes(
             "P1_x",
             "P1_y",
             "P2_x",
-            "P2_y",
-            "V_x",
-            "V_y" 
+            "P2_y" 
         ])
 
         for i, pontos in enumerate(posicoes):
@@ -202,7 +187,7 @@ def salvar_posicoes(
 
             linha = [i, tempo]
 
-            for nome in ["P0", "P1", "P2", "V"]:
+            for nome in ["P0", "P1", "P2"]:
                 ponto = pontos[nome]
 
                 if ponto is None:
@@ -225,7 +210,7 @@ def rastrear_pendulo(caminho,
                      caminho_csv = "dados_posicoes.csv",
                      caminho_saida="video_rastreamento.mp4"):
     """
-    Abre o vídeo e rastreia P0, P1, P2 e V frame a frame e salva um arquivo em mp4
+    Abre o vídeo e rastreia P0, P1 e P2 frame a frame e salva um arquivo em mp4
     """
 
     video = cv2.VideoCapture(caminho)
